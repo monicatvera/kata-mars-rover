@@ -1,30 +1,8 @@
-export type Direction = 'north' | 'south' | 'east' | 'west'
+import { Command, Coordinates } from "./types"
+import { Direction, directionMap, isDirectionCommand } from "./direction"
+import { isMovementCommand, movementCommandMap } from "./movement"
 
-export type Command = 'forward' | 'backward'
-
-export type RoverStartInput = Coordinates & {
-    direction: Direction
-}
-
-export type Coordinates = {
-    x: number
-    y: number
-}
-
-const movementForwardMap: Record<Direction, (_: Coordinates) => Coordinates> = {
-    north: ({x, y}) => ({x, y: y + 1}),
-    south: ({x, y}) => ({x, y: y - 1}),
-    east:  ({x, y}) => ({x: x + 1, y}),
-    west:  ({x, y}) => ({x: x - 1, y}),
-}
-
-const movementBackwardMap: Record<Direction, (_: Coordinates) => Coordinates> = {
-    north: ({x, y}) => ({x, y: y - 1}),
-    south: ({x, y}) => ({x, y: y + 1}),
-    east:  ({x, y}) => ({x: x - 1, y}),
-    west:  ({x, y}) => ({x: x + 1, y}),
-}
-
+type RoverStartInput = Coordinates & { direction: Direction }
 
 
 export class Rover {
@@ -39,30 +17,24 @@ export class Rover {
         this.#direction = direction
     }
 
-    get x() { return this.#x }
-    get y() { return this.#y }
-
-    receiveCommands(commands: Command[]) {
-        const commandMap: Record<Command, () => Coordinates> = {
-            forward: () => {
-                const movement = movementForwardMap[this.#direction]
-                return movement({x: this.#x, y: this.#y})
-
-            },
-            backward: () => {
-                const movement = movementBackwardMap[this.#direction]
-                return movement({x: this.#x, y: this.#y})
-            }
-        }
-
-        commands.forEach(command => {
-            const newCoordinates = commandMap[command]()
-            this.setCoordinates(newCoordinates)
-        })
+    get x() {
+        return this.#x
     }
 
-    private setCoordinates({x, y}: Coordinates){
-        this.#x = x
-        this.#y = y
+    get y() {
+        return this.#y
+    }
+
+    receiveCommands(commands: Command[]) {
+        commands.forEach(command => {
+            if (isMovementCommand(command)) {
+                const {x, y} = movementCommandMap[command]({ x: this.#x, y: this.#y}, this.#direction)
+
+                this.#x = x
+                this.#y = y
+            } else if (isDirectionCommand(command)) {
+                this.#direction = directionMap[command](this.#direction)
+            }
+        })
     }
 }
