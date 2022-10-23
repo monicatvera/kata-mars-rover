@@ -17,12 +17,8 @@ export class Rover {
         this.#direction = direction
     }
 
-    get x() {
-        return this.#x
-    }
-
-    get y() {
-        return this.#y
+    get isAt(): Coordinates {
+        return { x: this.#x, y: this.#y }
     }
 
     receiveCommands(commands: Command[]) {

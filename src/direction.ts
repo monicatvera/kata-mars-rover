@@ -3,10 +3,10 @@ import { UnionToArray } from "./helpers/union"
 
 export type Direction = 'north' | 'south' | 'east' | 'west'
 
-export type DirectionCommand = 'turnleft' | 'turnright'
+export type DirectionCommand = '⬅' | '➡'
 
 export function isDirectionCommand(command: Command): command is DirectionCommand {
-    const directionCommands: UnionToArray<DirectionCommand> = ['turnleft', 'turnright']
+    const directionCommands: UnionToArray<DirectionCommand> = ['⬅', '➡']
     return (directionCommands as Command[]).includes(command)
 }
 
@@ -26,6 +26,6 @@ const directionCounterClockwise: Record<Direction, Direction> = {
 }
 
 export const directionMap: Record<DirectionCommand, (direction: Direction) => Direction> = {
-    turnleft: direction => directionCounterClockwise[direction],
-    turnright: direction => directionClockwise[direction]
+    ['⬅']: direction => directionCounterClockwise[direction],
+    ['➡']: direction => directionClockwise[direction]
 }

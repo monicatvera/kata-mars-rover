@@ -3,10 +3,10 @@ import { Command, Coordinates } from "./types"
 import { Direction } from "./direction"
 import { UnionToArray } from "./helpers/union"
 
-export type MovementCommand = 'forward' | 'backward'
+export type MovementCommand = '⬆' | '⬇'
 
 export function isMovementCommand(command: Command): command is MovementCommand {
-    const movementCommands: UnionToArray<MovementCommand> = ['forward', 'backward']
+    const movementCommands: UnionToArray<MovementCommand> = ['⬆', '⬇']
     return (movementCommands as Command[]).includes(command)
 }
 
@@ -26,6 +26,6 @@ const movementBackwardMap: Record<Direction, (_: Coordinates) => Coordinates> = 
 
 
 export const movementCommandMap: Record<MovementCommand, ({x, y}: Coordinates, direction: Direction) => Coordinates> = {
-    forward: ({x, y}, direction) => movementForwardMap[direction]({x, y}),
-    backward: ({x, y}, direction) => movementBackwardMap[direction]({x, y})
+    ['⬆']: ({x, y}, direction) => movementForwardMap[direction]({x, y}),
+    ['⬇']: ({x, y}, direction) => movementBackwardMap[direction]({x, y})
 }
