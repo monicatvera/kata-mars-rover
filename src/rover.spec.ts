@@ -1,4 +1,5 @@
-import { Planet, Rover, isObstaclesReport } from "./Rover";
+import { Planet } from "./types";
+import { Rover } from "./Rover";
 
 describe("when rover is placed", () => {
     it('should be able to move forward', () => {
@@ -71,8 +72,7 @@ describe("when rover is placed", () => {
         ])
 
         expect(rover.isAt).toEqual({x: 2, y: 1})
-        expect(isObstaclesReport(result)).toBe(true)
-        expect((result as any).obstacle).toEqual(expectedObstacle)
+        expect((result as any).detectedObstacle).toEqual(expectedObstacle)
     })
     
 })

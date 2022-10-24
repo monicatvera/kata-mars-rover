@@ -1,15 +1,6 @@
-import { Command } from "./types"
-import { UnionToArray } from "./helpers/union"
+import { DirectionCommand } from "./types"
 
 export type Direction = 'north' | 'south' | 'east' | 'west'
-
-export type DirectionCommand = '⬅' | '➡'
-
-export function isDirectionCommand(command: Command): command is DirectionCommand {
-    const directionCommands: UnionToArray<DirectionCommand> = ['⬅', '➡']
-    return (directionCommands as Command[]).includes(command)
-}
-
 
 const directionClockwise: Record<Direction, Direction> = {
     north: "east",
